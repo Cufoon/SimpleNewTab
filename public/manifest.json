@@ -1,6 +1,6 @@
 {
   "name": "Simple Newtab",
-  "version": "1.0",
+  "version": "1.1.0",
   "description": "Just a clean new tab page.",
   "permissions": ["storage"],
   "chrome_url_overrides": {
@@ -12,5 +12,5 @@
     "48": "icons/48.png",
     "128": "icons/128.png"
   },
-  "manifest_version": 2
+  "manifest_version": 3
 }
