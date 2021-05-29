@@ -1,0 +1,23 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: rgb(240, 240, 240);
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial,
+    sans-serif;
+}
+
+@font-face {
+  font-family: 'webfont';
+  font-display: swap;
+  src: url('/fonts/webfont.eot') format('embedded-opentype'), url('/fonts/webfont.woff2') format('woff2'),
+    url('/fonts/webfont.woff') format('woff'), url('/fonts/webfont.ttf') format('truetype');
+}
+
+.web_font {
+  font-family: 'webfont' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
