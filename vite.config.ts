@@ -1,18 +1,9 @@
-import { defineConfig } from 'vite';
-import path from 'path';
-import reactRefresh from '@vitejs/plugin-react-refresh';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vitest/config';
 
-const srcPath = path.resolve(__dirname, './src/') + '/';
-
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [reactRefresh()],
-  resolve: {
-    alias: [
-      {
-        find: /^@\//,
-        replacement: srcPath
-      }
-    ]
+  plugins: [sveltekit()],
+  test: {
+    include: ['src/**/*.{test,spec}.{js,ts}']
   }
 });
