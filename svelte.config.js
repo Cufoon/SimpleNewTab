@@ -11,10 +11,20 @@ const config = {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: null,
+      fallback: 'index.html',
       precompress: false,
       strict: true
-    })
+    }),
+    appDir: 'cufoon_app',
+    csp: {
+      mode: 'auto',
+      directives: {
+        'default-src': ['unsafe-inline']
+      }
+    },
+    paths: {
+      relative: true
+    }
   }
 };
 

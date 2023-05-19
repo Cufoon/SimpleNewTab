@@ -26,16 +26,7 @@
 </div>
 
 <style lang="scss">
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 100%, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translateZ(0);
-    }
-  }
+  @import '$lib/scss/variable.scss';
 
   .searchBar {
     display: flex;
@@ -44,7 +35,7 @@
     box-sizing: border-box;
     padding: 12px;
     margin-top: 36px;
-    border-radius: 6px;
+    border-radius: $border-radius-big;
     background-color: rgb(252, 252, 252);
     box-shadow: 2px 2px 14px 0 rgba(67, 74, 161, 0.1);
     animation: fadeInUp 0.7s cubic-bezier(0.17, 0.67, 0.05, 1.11);
@@ -54,21 +45,21 @@
       box-sizing: border-box;
       width: 350px;
       height: 40px;
-      padding: 0 12px;
+      padding: 0 14px;
       font-size: 16px;
       line-height: 38px;
-      border: 2px solid #c4c4c4;
+      border: 2px solid #cfcfcf;
       border-right: none;
-      border-radius: 8px 0 0 8px;
+      border-radius: $border-radius-big 0 0 $border-radius-big;
       background-color: rgb(250, 250, 250);
       color: #797979;
       outline: none;
       transition: background-color 0.3s ease-in;
-      caret-color: #6d75e2;
+      caret-color: $theme-color;
 
       &:focus {
         outline: none;
-        border-color: #6d75e2;
+        border-color: $theme-color;
         background-color: rgb(244, 244, 244);
       }
     }
@@ -79,9 +70,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #6d75e2;
+      background-color: $theme-color;
       box-sizing: border-box;
-      border-radius: 0 8px 8px 0;
+      border-radius: 0 $border-radius-big $border-radius-big 0;
       cursor: pointer;
 
       .icon {

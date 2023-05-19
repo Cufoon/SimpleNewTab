@@ -14,30 +14,28 @@
   },
   "devDependencies": {
     "@neoconfetti/svelte": "^1.0.0",
-    "@playwright/test": "^1.32.3",
-    "@simonwep/pickr": "1.8.2",
+    "@playwright/test": "^1.33.0",
     "@sveltejs/adapter-static": "^2.0.2",
-    "@sveltejs/kit": "^1.15.7",
+    "@sveltejs/kit": "^1.18.0",
     "@types/cookie": "^0.5.1",
-    "@types/lodash": "^4.14.194",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
-    "eslint": "^8.38.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-svelte3": "^4.0.0",
-    "prettier": "^2.8.7",
+    "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.0",
-    "sass": "^1.62.0",
-    "svelte": "^3.58.0",
-    "svelte-check": "^3.2.0",
-    "tslib": "^2.5.0",
+    "sass": "^1.62.1",
+    "svelte": "^3.59.1",
+    "svelte-check": "^3.3.2",
+    "tslib": "^2.5.2",
     "typescript": "^5.0.4",
-    "vite": "^4.2.2",
-    "vitest": "^0.30.1"
+    "vite": "^4.3.8",
+    "vitest": "^0.31.1"
   },
   "type": "module",
   "dependencies": {
-    "konva": "^9.0.1",
-    "lodash": "^4.17.21"
+    "color-picker-svelte": "^1.4.0",
+    "localforage": "^1.10.0"
   }
 }
