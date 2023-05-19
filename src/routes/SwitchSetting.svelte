@@ -1,5 +1,5 @@
 <script context="module">
-  import { getClearColor } from '$lib/utils/color';
+  import { getClearColorFromRGBA, checkIsColorRGBA, hex2RGBA } from '$lib/utils/color';
 </script>
 
 <script lang="ts">
@@ -9,14 +9,16 @@
   let hover = false;
   const onHover = () => (hover = true);
   const onUnHover = () => (hover = false);
-  $: color = getClearColor(bgColor);
+  $: color = getClearColorFromRGBA(
+    checkIsColorRGBA(bgColor) ? bgColor : hex2RGBA(bgColor) || 'rgb(240,240,240)'
+  );
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class={open ? 'settingIcon rotate' : 'settingIcon'} on:click={changeOpen}>
+<div class="settingIcon" class:rotate={open} on:click={changeOpen}>
   <svg
     class="icon"
-    style="fill:{open || hover ? getClearColor(color, 24) : color}"
+    style="fill:{open || hover ? getClearColorFromRGBA(color, 24) : color}"
     on:mouseenter={onHover}
     on:mouseleave={onUnHover}
     viewBox="0 0 1024 1024"

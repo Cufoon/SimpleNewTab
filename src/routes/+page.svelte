@@ -1,13 +1,15 @@
 <script context="module">
+  import { onMount } from 'svelte';
+  import { Color } from 'color-picker-svelte';
+  import storage from '$lib/utils/storage';
   import { defaultSetting } from '$lib/utils/setting';
-  import { storage } from '$lib/utils/chrome';
   import SearchBar from './SearchBar.svelte';
   import SwitchSetting from './SwitchSetting.svelte';
   import ColorPicker from './ColorPicker.svelte';
 </script>
 
 <script lang="ts">
-  let bgColor = '#f0f0f0ff';
+  let bgColor = '#f0f0f0';
   let showSetting = false;
   const switchShowSetting = () => {
     showSetting = !showSetting;
@@ -17,10 +19,54 @@
     storage.setBackgroundColor(value);
   };
 
-  (async () => {
-    const defaultColor = await storage.getBackgroundColor();
-    bgColor = defaultColor;
-  })();
+  let nowColor = bgColor;
+  let color = new Color(bgColor);
+  let positionRelativeElmt: HTMLDivElement;
+  let isOpenColorPicker = false;
+
+  const openColorPicker = () => {
+    console.log('bgColor', bgColor);
+    if (isOpenColorPicker === false) {
+      nowColor = bgColor;
+      previewColor = bgColor;
+      color = new Color(bgColor);
+      isOpenColorPicker = true;
+    }
+  };
+
+  let previewColor = bgColor;
+
+  const onColorPickerChange = (color: string) => {
+    previewColor = color;
+    bgColor = color;
+  };
+
+  const onColorPickerCancel = () => {
+    color = new Color(nowColor);
+    previewColor = nowColor;
+    bgColor = nowColor;
+  };
+
+  const onColorPickerSave = (color: string) => {
+    onBgColorSave(color);
+    bgColor = color;
+  };
+
+  const onResetDefaultColor = () => {
+    color = new Color(defaultSetting.backgroundColor);
+    bgColor = defaultSetting.backgroundColor;
+    previewColor = defaultSetting.backgroundColor;
+  };
+
+  onMount(() => {
+    (async () => {
+      const defaultColor = (await storage.getBackgroundColor()) || defaultSetting.backgroundColor;
+      bgColor = defaultColor;
+      nowColor = defaultColor;
+      previewColor = defaultColor;
+      console.log('defaultColor', defaultColor);
+    })();
+  });
 </script>
 
 <svelte:head>
@@ -28,7 +74,7 @@
   <meta name="description" content="Simple Newtab developed by Lin Cufoon" />
 </svelte:head>
 
-<div class="container" style="backgroundColor: {bgColor}">
+<div class="container" style="background-color: {bgColor}">
   <div class="header">
     <div class="settingIcon">
       <SwitchSetting open={showSetting} changeOpen={switchShowSetting} {bgColor} />
@@ -39,14 +85,25 @@
       <div class="title web_font">遇见更好的自己，和更好的你。</div>
       <SearchBar />
     </div>
-    <div class={showSetting ? 'rightPart rightPartOpen' : 'rightPart'}>
+    <div class="rightPart" class:rightPartOpen={showSetting}>
       <div class="settingPanel">
-        <div class="option">
+        <div class="option" bind:this={positionRelativeElmt}>
           <div>背景颜色设置</div>
+          <div>
+            <button
+              class="colorPickerButton"
+              style={`background-color: ${previewColor}`}
+              on:click={openColorPicker}
+            />
+          </div>
           <ColorPicker
-            defaultColor={defaultSetting.backgroundColor}
-            initialColor={bgColor}
-            onSave={onBgColorSave}
+            bind:color
+            bind:positionRelativeElmt
+            bind:isOpenColorPicker
+            onChange={onColorPickerChange}
+            onCancel={onColorPickerCancel}
+            onSave={onColorPickerSave}
+            onReset={onResetDefaultColor}
           />
         </div>
       </div>
@@ -55,18 +112,7 @@
 </div>
 
 <style lang="scss">
-  @keyframes fadeInDown {
-    0% {
-      opacity: 0;
-      -webkit-transform: translate3d(0, -100%, 0);
-      transform: translate3d(0, -100%, 0);
-    }
-    to {
-      opacity: 1;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-  }
+  @import '$lib/scss/variable.scss';
 
   .container {
     width: 100vw;
@@ -75,7 +121,8 @@
     box-sizing: border-box;
     overflow: hidden;
     background-color: rgb(240, 240, 240);
-    transition: 0.88s cubic-bezier(0.32, 0.05, 0.06, 0.98) 0.08s;
+    will-change: background-color;
+    transition: background-color 0.5s cubic-bezier(0.32, 0.05, 0.06, 0.98);
 
     .header {
       width: 100%;
@@ -110,7 +157,7 @@
         flex-shrink: 0;
         box-sizing: border-box;
         background-color: #ffffff;
-        border-radius: 8px;
+        border-radius: $border-radius-big;
         box-shadow: 2px 2px 14px 0 rgba(67, 74, 161, 0.1);
         transition: width 0.5s cubic-bezier(0.67, 0.27, 0, 0.93);
         overflow: hidden;
@@ -131,7 +178,8 @@
       -webkit-user-select: none;
       user-select: none;
       text-align: center;
-      color: #6d75e2;
+      // color: #6d75e2;
+      color: $theme-color;
       animation: fadeInDown 0.25s cubic-bezier(1, 0.67, 1, 1.39);
       text-shadow: 1px 1px 16px rgba(79, 85, 168, 0.3);
 
@@ -152,6 +200,14 @@
         padding: 6px 12px;
         color: #757575;
         font-size: 16px;
+        user-select: none;
+      }
+
+      .colorPickerButton {
+        width: 32px;
+        height: 32px;
+        border-radius: 100%;
+        border: 4px #f0f0f0 solid;
       }
     }
   }

@@ -25,8 +25,8 @@ body {
   margin: 0;
   background: rgb(240, 240, 240);
   box-sizing: border-box;
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
-    '微软雅黑', Arial, sans-serif;
+  font-family: 'MiSans', 'SF Pro SC', 'SF Pro Text', 'SF Pro Icons', 'PingFang SC',
+    'HarmonyOS_Regular', 'Helvetica Neue', 'Microsoft YaHei', 'Helvetica', 'Arial', sans-serif;
 }
 
 @font-face {
@@ -43,3 +43,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+button {
+  outline: none;
+  border: none;
+}
+
+@import "./animation";

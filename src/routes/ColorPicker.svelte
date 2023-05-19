@@ -1,107 +1,158 @@
 <script context="module">
-  import { onMount } from 'svelte';
-  import Pickr from '@simonwep/pickr';
+  import { cubicIn, cubicOut } from 'svelte/easing';
+  import { Color, ColorPicker } from 'color-picker-svelte';
 </script>
 
 <script lang="ts">
-  export let onSave: (value: string) => any;
-  export let initialColor: string;
-  export let defaultColor: string;
-  let color = initialColor;
-  let picker: Pickr | null = null;
-  let showPicker = false;
+  export let color: Color;
+  export let positionRelativeElmt: HTMLElement;
+  export let isOpenColorPicker = false;
+  export let onChange = (color: string) => {};
+  export let onSave = (color: string) => {};
+  export let onCancel = (color?: string) => {};
+  export let onReset: ((...args: any[]) => any) | null = null;
 
-  const updatePickColor = (v: string) => {
-    picker?.setColor(v, true);
+  const changeColorPickerOpenState = () => {
+    isOpenColorPicker = !isOpenColorPicker;
   };
 
-  $: updatePickColor(initialColor);
-
-  $: console.log(initialColor);
-
-  const onOpenColorPicker = () => {
-    showPicker = !showPicker;
+  const onClickSave = () => {
+    onSave(color.toHex8String());
+    isOpenColorPicker = false;
   };
 
-  onMount(() => {
-    console.log(document.getElementById('cx'));
-    picker = Pickr.create({
-      el: '#cx',
-      theme: 'classic',
-      container: '#app',
-      default: initialColor,
-      appClass: 'colorPicker',
-      showAlways: false,
-      useAsButton: true,
-      swatches: ['rgba(252, 252, 252, 1)', 'rgba(244, 244, 244, 1)', 'rgba(212, 212, 212, 1)'],
-      position: 'top-end',
-      adjustableNumbers: true,
-      autoReposition: true,
-      defaultRepresentation: 'RGBA',
-      components: {
-        preview: true,
-        opacity: true,
-        hue: true,
-        interaction: {
-          hex: true,
-          rgba: true,
-          input: true,
-          cancel: true,
-          clear: true,
-          save: true
-        }
-      },
-      i18n: {
-        'ui:dialog': '选择背景颜色',
-        'btn:swatch': '历史颜色',
-        'btn:last-color': '使用之前的颜色',
-        'btn:save': '保存',
-        'btn:cancel': '取消',
-        'btn:clear': '恢复默认',
-        'aria:btn:save': '保存',
-        'aria:btn:cancel': '取消',
-        'aria:btn:clear': '恢复默认',
-        'aria:input': '颜色输入框',
-        'aria:palette': '颜色选择面板',
-        'aria:hue': '色相滑动选择条',
-        'aria:opacity': '透明度滑动选择条'
-      }
-    });
-    picker
-      ?.on('save', (hsva: Pickr.HSVaColor, instance: Pickr) => {
-        const newColor = hsva?.toRGBA().toString() || defaultColor;
-        color = newColor;
-        onSave(newColor);
-        instance?.hide();
-      })
-      .on('cancel', (instance: Pickr) => {
-        instance?.hide();
-      });
-  });
-</script>
+  const onClickCancel = () => {
+    onCancel(color.toHex8String());
+    isOpenColorPicker = false;
+  };
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div on:click={onOpenColorPicker} class="colorBtn" style="background-color: {color}" />
-<div class="wrapper" style="display: {showPicker ? 'block' : 'none'}">
-  <div id="cx" class="colorBtn" />
-</div>
+  $: onChange(color.toHex8String());
 
-<style lang="scss">
-  .colorBtn {
-    width: 24px;
-    height: 24px;
-    background-color: #000000;
-    border-radius: 100%;
-    border: 2px solid #757575;
+  function transitionHideHeader(node: Element, param?: { delay: any }) {
+    return {
+      delay: param?.delay || 0,
+      duration: 200,
+      easing: cubicOut,
+      css: (t: number, u: number) =>
+        `opacity:${t}; transform: translate3d(0,${Math.floor(u * 100)}%,0)`
+    };
   }
 
-  .wrapper {
+  function transitionHidePicker(node: Element, param?: { delay: any }) {
+    return {
+      delay: param?.delay || 0,
+      duration: 200,
+      easing: cubicIn,
+      css: (t: number, u: number) =>
+        `opacity:${t}; transform: translate3d(0,${Math.floor(u * 50)}px,0)`
+    };
+  }
+</script>
+
+<svelte:head>
+  <title>测试</title>
+  <meta name="description" content="Simple Newtab developed by Lin Cufoon" />
+</svelte:head>
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+{#if isOpenColorPicker}
+  <div class="mask" on:click={changeColorPickerOpenState} />
+  <div class="pickerContainerHeader" out:transitionHideHeader>
+    <div class="pickerContainerHeaderText">{color.toHex8String()}</div>
+    <div>
+      {#if onReset !== null}
+        <button
+          class="pickerContainerHeaderButton pickerContainerHeaderButtonCancel"
+          on:click={onReset}>重置</button
+        >
+      {/if}
+      <button
+        class="pickerContainerHeaderButton pickerContainerHeaderButtonCancel"
+        on:click={onClickCancel}>取消</button
+      >
+      <button
+        class="pickerContainerHeaderButton pickerContainerHeaderButtonOK"
+        on:click={onClickSave}>确认</button
+      >
+    </div>
+  </div>
+  <div class="pickerContainer" out:transitionHidePicker={{ delay: 100 }}>
+    <ColorPicker
+      positioningContextElement={positionRelativeElmt}
+      bind:color
+      isOpen={isOpenColorPicker}
+      position={2}
+      showAlphaSlider
+    />
+  </div>
+{/if}
+
+<style lang="scss">
+  @import '$lib/scss/variable.scss';
+
+  .mask {
+    width: 100vw;
+    height: 100vh;
     position: absolute;
-    left: 0;
     top: 0;
-    width: 50vw;
-    height: 50vh;
-    display: none;
-    background-color: #000000;
+    left: 0;
+    z-index: 99;
+  }
+
+  .pickerContainerHeader {
+    width: 300px;
+    position: absolute;
+    z-index: 299;
+    right: 50px;
+    background-color: white;
+    margin-top: 150px;
+    padding: 15px 10px 60px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: $border-radius-big;
+    box-shadow: 2px 2px 20px 1px rgba(67, 74, 161, 0.1);
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+    animation: fadeInUp 0.4s cubic-bezier(0.17, 0.87, 0.15, 1.11) 0.2s forwards;
+
+    &Text {
+      color: black;
+    }
+
+    &Button {
+      cursor: pointer;
+      background: none;
+      border-radius: 8px;
+      // border: 1px solid hsla(222, 14%, 47%, 0.3);
+      color: white;
+      padding: 4px 6px;
+
+      &Cancel {
+        background-color: hsl(0, 66%, 50%);
+      }
+
+      &OK {
+        background-color: hsl(206, 88%, 38%);
+      }
+    }
+  }
+
+  .pickerContainer {
+    width: 300px;
+    height: 0;
+    background-color: white;
+    position: absolute;
+    z-index: 299;
+    right: 50px;
+    margin-top: 150px;
+
+    :global(.color-picker) {
+      animation: fadeInUpSmall 0.5s cubic-bezier(0.57, 0.37, 0.05, 1.11);
+      border-radius: $border-radius-big;
+      border: none;
+      box-shadow: 2px 2px 32px 3px rgba(67, 74, 161, 0.1);
+    }
   }
 </style>
