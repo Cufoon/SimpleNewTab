@@ -2,7 +2,6 @@
   let searchInput = '';
 
   const relaunchSearch = () => {
-    console.log(searchInput);
     window.location.href = `https://www.baidu.com/s?ie=UTF-8&wd=${encodeURIComponent(searchInput)}`;
   };
 
@@ -26,7 +25,7 @@
 </div>
 
 <style lang="scss">
-  @import '$lib/scss/variable.scss';
+  @import '../lib/scss/variable.scss';
 
   .searchBar {
     display: flex;

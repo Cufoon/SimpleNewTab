@@ -88,7 +88,7 @@
 {/if}
 
 <style lang="scss">
-  @import '$lib/scss/variable.scss';
+  @import '../lib/scss/variable.scss';
 
   .mask {
     width: 100vw;

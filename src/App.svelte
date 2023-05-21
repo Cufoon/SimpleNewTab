@@ -1,11 +1,17 @@
 <script context="module">
+  import { printCopyright } from './lib/utils/copyright';
+  import './lib/css/normalize.css';
+  import './lib/scss/global.scss';
+
+  printCopyright();
+
   import { onMount } from 'svelte';
   import { Color } from 'color-picker-svelte';
-  import storage from '$lib/utils/storage';
-  import { defaultSetting } from '$lib/utils/setting';
-  import SearchBar from './SearchBar.svelte';
-  import SwitchSetting from './SwitchSetting.svelte';
-  import ColorPicker from './ColorPicker.svelte';
+  import storage from './lib/utils/storage';
+  import { defaultSetting } from './lib/utils/setting';
+  import SearchBar from './components/SearchBar.svelte';
+  import SwitchSetting from './components/SwitchSetting.svelte';
+  import ColorPicker from './components/ColorPicker.svelte';
 </script>
 
 <script lang="ts">
@@ -25,7 +31,6 @@
   let isOpenColorPicker = false;
 
   const openColorPicker = () => {
-    console.log('bgColor', bgColor);
     if (isOpenColorPicker === false) {
       nowColor = bgColor;
       previewColor = bgColor;
@@ -60,11 +65,11 @@
 
   onMount(() => {
     (async () => {
-      const defaultColor = (await storage.getBackgroundColor()) || defaultSetting.backgroundColor;
+      const defaultColor =
+        (await storage.getBackgroundColor()) || defaultSetting.backgroundColor;
       bgColor = defaultColor;
       nowColor = defaultColor;
       previewColor = defaultColor;
-      console.log('defaultColor', defaultColor);
     })();
   });
 </script>
@@ -77,7 +82,11 @@
 <div class="container" style="background-color: {bgColor}">
   <div class="header">
     <div class="settingIcon">
-      <SwitchSetting open={showSetting} changeOpen={switchShowSetting} {bgColor} />
+      <SwitchSetting
+        open={showSetting}
+        changeOpen={switchShowSetting}
+        {bgColor}
+      />
     </div>
   </div>
   <div class="main">
@@ -112,7 +121,7 @@
 </div>
 
 <style lang="scss">
-  @import '$lib/scss/variable.scss';
+  @import './lib/scss/variable.scss';
 
   .container {
     width: 100vw;
@@ -122,7 +131,7 @@
     overflow: hidden;
     background-color: rgb(240, 240, 240);
     will-change: background-color;
-    transition: background-color 0.5s cubic-bezier(0.32, 0.05, 0.06, 0.98);
+    transition: background-color 0.5s cubic-bezier(0.32, 0.05, 0.06, 0.98) 0.07s;
 
     .header {
       width: 100%;

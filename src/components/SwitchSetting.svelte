@@ -1,5 +1,5 @@
 <script context="module">
-  import { getClearColorFromRGBA, checkIsColorRGBA, hex2RGBA } from '$lib/utils/color';
+  import { getClearColorFromRGBA, checkIsColorRGBA, hex2RGBA } from '../lib/utils/color';
 </script>
 
 <script lang="ts">
