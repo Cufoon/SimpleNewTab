@@ -1,5 +1,7 @@
 {
+  "manifest_version": 3,
   "name": "Simple Newtab",
+  "author": "Cufoon",
   "version": "1.3.0",
   "description": "Just a clean new tab page.",
   "permissions": ["storage"],
@@ -11,6 +13,5 @@
     "32": "icons/32.png",
     "48": "icons/48.png",
     "128": "icons/128.png"
-  },
-  "manifest_version": 3
+  }
 }
