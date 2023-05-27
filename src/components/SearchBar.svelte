@@ -2,7 +2,7 @@
   let searchInput = '';
 
   const relaunchSearch = () => {
-    window.location.href = `https://www.baidu.com/s?ie=UTF-8&wd=${encodeURIComponent(searchInput)}`;
+    window.location.href = `https://bing.com/search?q=${encodeURIComponent(searchInput)}`;
   };
 
   const onEnter = (e: { key: string; code: string }) => {
