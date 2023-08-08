@@ -15,7 +15,9 @@ export const hex2RGBA = (hexColor: string) => {
   const hex = `0x${hexColor.substring(1)}`;
   const hn = parseInt(hex);
   if (hex.length === 10) {
-    return `rgba(${(hn >> 24) & 255},${(hn >> 16) & 255},${(hn >> 8) & 255},${(hn & 255) / 255})`;
+    return `rgba(${(hn >> 24) & 255},${(hn >> 16) & 255},${(hn >> 8) & 255},${
+      (hn & 255) / 255
+    })`;
   }
   if (hex.length === 8) {
     return `rgba(${(hn >> 16) & 255},${(hn >> 8) & 255},${hn & 255},1)`;
@@ -25,7 +27,9 @@ export const hex2RGBA = (hexColor: string) => {
     const g = (hn >> 8) & 15;
     const b = (hn >> 4) & 15;
     const a = hn & 15;
-    return `rgba(${(r << 4) + r},${(g << 4) + g},${(b << 4) + b},${((a << 4) + a) / 255})`;
+    return `rgba(${(r << 4) + r},${(g << 4) + g},${(b << 4) + b},${
+      ((a << 4) + a) / 255
+    })`;
   }
   if (hex.length === 5) {
     const r = (hn >> 8) & 15;

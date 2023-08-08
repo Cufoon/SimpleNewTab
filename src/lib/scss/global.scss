@@ -25,15 +25,18 @@ body {
   margin: 0;
   background: rgb(240, 240, 240);
   box-sizing: border-box;
-  font-family: 'MiSans', 'SF Pro SC', 'SF Pro Text', 'SF Pro Icons', 'PingFang SC',
-    'HarmonyOS_Regular', 'Helvetica Neue', 'Microsoft YaHei', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'MiSans', 'SF Pro SC', 'SF Pro Text', 'SF Pro Icons',
+    'PingFang SC', 'HarmonyOS_Regular', 'Helvetica Neue', 'Microsoft YaHei',
+    'Helvetica', 'Arial', sans-serif;
 }
 
 @font-face {
   font-family: 'webfont';
   font-display: swap;
-  src: url('/fonts/webfont.eot') format('embedded-opentype'),
-    url('/fonts/webfont.woff2') format('woff2'), url('/fonts/webfont.woff') format('woff'),
+  src:
+    url('/fonts/webfont.eot') format('embedded-opentype'),
+    url('/fonts/webfont.woff2') format('woff2'),
+    url('/fonts/webfont.woff') format('woff'),
     url('/fonts/webfont.ttf') format('truetype');
 }
 
@@ -49,4 +52,4 @@ button {
   border: none;
 }
 
-@import "./animation";
+@import './animation';

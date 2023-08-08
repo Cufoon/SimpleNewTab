@@ -1,0 +1,39 @@
+# just keep default
+printWidth: 80
+tabWidth: 2
+useTabs: false
+semi: true
+quoteProps: as-needed
+bracketSpacing: true
+bracketSameLine: false
+arrowParens: always
+requirePragma: false
+insertPragma: false
+proseWrap: preserve
+htmlWhitespaceSensitivity: css
+endOfLine: lf
+embeddedLanguageFormatting: auto
+singleAttributePerLine: false
+
+
+# change something
+singleQuote: true
+jsxSingleQuote: true
+trailingComma: none
+vueIndentScriptAndStyle: true
+
+
+# plugins
+plugins:
+  - prettier-plugin-svelte
+svelteStrictMode: true
+
+
+# overrides
+overrides:
+  - files: ".prettierrc"
+    options:
+      parser: yaml
+  - files: ".stylelintrc"
+    options:
+      parser: json

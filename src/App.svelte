@@ -83,8 +83,8 @@
   <div class="header">
     <div class="settingIcon">
       <SwitchSetting
-        open={showSetting}
-        changeOpen={switchShowSetting}
+        open="{showSetting}"
+        changeOpen="{switchShowSetting}"
         {bgColor}
       />
     </div>
@@ -94,25 +94,25 @@
       <div class="title web_font">遇见更好的自己，和更好的你。</div>
       <SearchBar />
     </div>
-    <div class="rightPart" class:rightPartOpen={showSetting}>
+    <div class="rightPart" class:rightPartOpen="{showSetting}">
       <div class="settingPanel">
-        <div class="option" bind:this={positionRelativeElmt}>
+        <div class="option" bind:this="{positionRelativeElmt}">
           <div>背景颜色设置</div>
           <div>
             <button
               class="colorPickerButton"
-              style={`background-color: ${previewColor}`}
-              on:click={openColorPicker}
-            />
+              style="{`background-color: ${previewColor}`}"
+              on:click="{openColorPicker}"
+            ></button>
           </div>
           <ColorPicker
             bind:color
             bind:positionRelativeElmt
             bind:isOpenColorPicker
-            onChange={onColorPickerChange}
-            onCancel={onColorPickerCancel}
-            onSave={onColorPickerSave}
-            onReset={onResetDefaultColor}
+            onChange="{onColorPickerChange}"
+            onCancel="{onColorPickerCancel}"
+            onSave="{onColorPickerSave}"
+            onReset="{onResetDefaultColor}"
           />
         </div>
       </div>

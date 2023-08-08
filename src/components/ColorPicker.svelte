@@ -54,34 +54,35 @@
   <meta name="description" content="Simple Newtab developed by Lin Cufoon" />
 </svelte:head>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if isOpenColorPicker}
-  <div class="mask" on:click={changeColorPickerOpenState} />
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="mask" on:click="{changeColorPickerOpenState}"></div>
   <div class="pickerContainerHeader" out:transitionHideHeader>
     <div class="pickerContainerHeaderText">{color.toHex8String()}</div>
     <div>
       {#if onReset !== null}
         <button
           class="pickerContainerHeaderButton pickerContainerHeaderButtonCancel"
-          on:click={onReset}>重置</button
+          on:click="{onReset}">重置</button
         >
       {/if}
       <button
         class="pickerContainerHeaderButton pickerContainerHeaderButtonCancel"
-        on:click={onClickCancel}>取消</button
+        on:click="{onClickCancel}">取消</button
       >
       <button
         class="pickerContainerHeaderButton pickerContainerHeaderButtonOK"
-        on:click={onClickSave}>确认</button
+        on:click="{onClickSave}">确认</button
       >
     </div>
   </div>
-  <div class="pickerContainer" out:transitionHidePicker={{ delay: 100 }}>
+  <div class="pickerContainer" out:transitionHidePicker="{{ delay: 100 }}">
     <ColorPicker
-      positioningContextElement={positionRelativeElmt}
+      positioningContextElement="{positionRelativeElmt}"
       bind:color
-      isOpen={isOpenColorPicker}
-      position={2}
+      isOpen="{isOpenColorPicker}"
+      position="{2}"
       showAlphaSlider
     />
   </div>

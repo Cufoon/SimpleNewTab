@@ -2,7 +2,9 @@
   let searchInput = '';
 
   const relaunchSearch = () => {
-    window.location.href = `https://bing.com/search?q=${encodeURIComponent(searchInput)}`;
+    window.location.href = `https://bing.com/search?q=${encodeURIComponent(
+      searchInput
+    )}`;
   };
 
   const onEnter = (e: { key: string; code: string }) => {
@@ -11,16 +13,24 @@
     }
   };
 
-  const onInput = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+  const onInput = (
+    e: Event & { currentTarget: EventTarget & HTMLInputElement }
+  ) => {
     searchInput = e.currentTarget.value;
   };
 </script>
 
 <div class="searchBar">
-  <input class="input" on:input={onInput} on:keypress={onEnter} aria-label="search" />
+  <input
+    class="input"
+    on:input="{onInput}"
+    on:keypress="{onEnter}"
+    aria-label="search"
+  />
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="submit" on:click={relaunchSearch}>
-    <div class="icon" />
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="submit" on:click="{relaunchSearch}">
+    <div class="icon"></div>
   </div>
 </div>
 

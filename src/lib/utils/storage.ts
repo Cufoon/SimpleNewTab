@@ -12,7 +12,9 @@ interface Storage extends AnyRecord {
 
 type AsyncGet<T extends KEY> = Promise<Storage[T] | null>;
 
-async function getItem(key: `${KEY.BACKGROUND_COLOR}`): AsyncGet<KEY.BACKGROUND_COLOR>;
+async function getItem(
+  key: `${KEY.BACKGROUND_COLOR}`
+): AsyncGet<KEY.BACKGROUND_COLOR>;
 async function getItem(key: `${KEY}`): AsyncGet<KEY> {
   try {
     return await localforage.getItem<Storage[typeof key]>(key);
