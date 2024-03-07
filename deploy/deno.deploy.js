@@ -1,5 +1,4 @@
-import { serve } from 'https://deno.land/std@0.188.0/http/server.ts';
-import { serveDir } from 'https://deno.land/std@0.188.0/http/file_server.ts';
+import { serveDir } from 'https://deno.land/std@0.218.2/http/file_server.ts';
 
 const setHeaders = (res) => {
   res.headers.set(
@@ -14,7 +13,7 @@ const setHeaders = (res) => {
   return res;
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   const res = await serveDir(req, {
     fsRoot: './html'
   });
