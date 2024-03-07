@@ -1,14 +1,14 @@
 import localforage from 'localforage';
 
 enum KEY {
-  BACKGROUND_COLOR = 'background.color',
+  SEARCH_POSITION = 'search.position',
   SEARCH_ENGINE = 'search.engine'
 }
 
 type AnyRecord = Record<KEY, unknown>;
 
 interface Storage extends AnyRecord {
-  [KEY.BACKGROUND_COLOR]: string;
+  [KEY.SEARCH_POSITION]: string;
   [KEY.SEARCH_ENGINE]: string;
 }
 
@@ -18,8 +18,8 @@ async function getItem(
   key: `${KEY.SEARCH_ENGINE}`
 ): AsyncGet<KEY.SEARCH_ENGINE>;
 async function getItem(
-  key: `${KEY.BACKGROUND_COLOR}`
-): AsyncGet<KEY.BACKGROUND_COLOR>;
+  key: `${KEY.SEARCH_POSITION}`
+): AsyncGet<KEY.SEARCH_POSITION>;
 async function getItem(key: `${KEY}`): AsyncGet<KEY> {
   try {
     return await localforage.getItem<Storage[typeof key]>(key);
@@ -34,8 +34,8 @@ async function setItem(
   value: Storage[KEY.SEARCH_ENGINE]
 ): Promise<boolean>;
 async function setItem(
-  key: `${KEY.BACKGROUND_COLOR}`,
-  value: Storage[KEY.BACKGROUND_COLOR]
+  key: `${KEY.SEARCH_POSITION}`,
+  value: Storage[KEY.SEARCH_POSITION]
 ): Promise<boolean>;
 async function setItem(key: `${KEY}`, value: Storage[KEY]): Promise<boolean> {
   try {
@@ -57,10 +57,10 @@ async function removeItem(key: `${KEY}`) {
   return false;
 }
 
-const getBackgroundColor = () => getItem(KEY.BACKGROUND_COLOR);
-const setBackgroundColor = (value: Storage[KEY.BACKGROUND_COLOR]) =>
-  setItem(KEY.BACKGROUND_COLOR, value);
-const removeBackgroundColor = () => removeItem(KEY.BACKGROUND_COLOR);
+const getSearchPosition = () => getItem(KEY.SEARCH_POSITION);
+const setSearchPosition = (value: Storage[KEY.SEARCH_POSITION]) =>
+  setItem(KEY.SEARCH_POSITION, value);
+const removeSearchPosition = () => removeItem(KEY.SEARCH_POSITION);
 
 const getSearchEngine = () => getItem(KEY.SEARCH_ENGINE);
 const setSearchEngine = (value: Storage[KEY.SEARCH_ENGINE]) =>
@@ -78,9 +78,9 @@ const clear = async () => {
 };
 
 export default {
-  getBackgroundColor,
-  setBackgroundColor,
-  removeBackgroundColor,
+  getSearchPosition,
+  setSearchPosition,
+  removeSearchPosition,
   getSearchEngine,
   setSearchEngine,
   removeSearchEngine,

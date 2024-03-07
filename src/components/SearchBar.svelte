@@ -51,31 +51,33 @@
 </script>
 
 <div class="searchBar" class:searchBarShow="{searchEngineKey !== ''}">
-  <div class="engineWrapper">
+  <div class="lineWrapper">
+    <div class="engineWrapper">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div on:click="{onShowEngineSelect}">{searchEngine?.name || ''}</div>
+      <div class="engineList" class:engineListShow="{showEngineSelect}">
+        {#each engineList as engine (engine.key)}
+          <SearchEngineComponent
+            bind:selectedKey="{searchEngineKey}"
+            engineKey="{engine.key}"
+            engineName="{engine.name}"
+            onClick="{onSelectSearchEngine}"
+          />
+        {/each}
+      </div>
+    </div>
+    <input
+      class="input"
+      bind:value="{searchInput}"
+      on:keypress="{onEnter}"
+      aria-label="search"
+    />
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div on:click="{onShowEngineSelect}">{searchEngine?.name || ''}</div>
-    <div class="engineList" class:engineListShow="{showEngineSelect}">
-      {#each engineList as engine (engine.key)}
-        <SearchEngineComponent
-          bind:selectedKey="{searchEngineKey}"
-          engineKey="{engine.key}"
-          engineName="{engine.name}"
-          onClick="{onSelectSearchEngine}"
-        />
-      {/each}
+    <div class="submit" on:click="{relaunchSearch}">
+      <div class="icon"></div>
     </div>
-  </div>
-  <input
-    class="input"
-    bind:value="{searchInput}"
-    on:keypress="{onEnter}"
-    aria-label="search"
-  />
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div class="submit" on:click="{relaunchSearch}">
-    <div class="icon"></div>
   </div>
 </div>
 
@@ -87,12 +89,23 @@
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    padding: 12px;
+    padding: 12px 16px;
     margin-top: 36px;
     border-radius: $border-radius-big;
     background-color: rgb(252, 252, 252);
     box-shadow: 2px 2px 14px 0 rgba(67, 74, 161, 0.1);
     animation: fadeInUp 0.7s cubic-bezier(0.17, 0.67, 0.05, 1.11);
+
+    $border-radius-big: 12px;
+
+    .lineWrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      background-color: $theme-color;
+      border-radius: $border-radius-big;
+    }
 
     .engineWrapper {
       position: relative;
@@ -108,13 +121,15 @@
       cursor: pointer;
       text-align: center;
       color: rgb(252, 252, 252);
+      user-select: none;
     }
 
     .engineList {
       position: absolute;
       box-sizing: border-box;
       padding: 0 12px;
-      bottom: 0;
+      top: 44px;
+      left: 0;
       width: auto;
       padding: 6px;
       font-size: 16px;
@@ -137,7 +152,7 @@
       padding: 0 14px;
       font-size: 16px;
       line-height: 38px;
-      border: 2px solid #cfcfcf;
+      border: 2px solid $theme-color;
       border-right: none;
       border-left: none;
       background-color: rgb(250, 250, 250);
@@ -145,11 +160,11 @@
       outline: none;
       transition: background-color 0.3s ease-in;
       caret-color: $theme-color;
+      border-radius: 14px;
 
       &:focus {
         outline: none;
-        border-color: $theme-color;
-        background-color: rgb(244, 244, 244);
+        background-color: rgb(234, 234, 234);
       }
     }
 
@@ -178,5 +193,32 @@
 
   .searchBarShow {
     display: flex;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .searchBar {
+      background-color: #252525;
+
+      .lineWrapper {
+        background-color: $theme-color-dark;
+      }
+
+      .engineWrapper {
+        background-color: $theme-color-dark;
+      }
+
+      .input {
+        background-color: #000;
+        border-color: $theme-color-dark;
+
+        &:focus {
+          background-color: #333;
+        }
+      }
+
+      .submit {
+        background-color: $theme-color-dark;
+      }
+    }
   }
 </style>

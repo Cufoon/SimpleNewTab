@@ -6,70 +6,43 @@
   printCopyright();
 
   import { onMount } from 'svelte';
-  import { Color } from 'color-picker-svelte';
-  import storage from './lib/utils/storage';
-  import { defaultSetting } from './lib/utils/setting';
   import SearchBar from './components/SearchBar.svelte';
   import SwitchSetting from './components/SwitchSetting.svelte';
-  import ColorPicker from './components/ColorPicker.svelte';
+  import IconTop from './icons/IconTop.svelte';
+  import IconTopSelected from './icons/IconTopSelected.svelte';
+  import IconMiddle from './icons/IconMiddle.svelte';
+  import IconMiddleSelected from './icons/IconMiddleSelected.svelte';
+  import storage from './lib/utils/storage';
+  import { defaultSetting } from './lib/utils/setting';
 </script>
 
 <script lang="ts">
-  let bgColor = '#f0f0f0';
   let showSetting = false;
   const switchShowSetting = () => {
     showSetting = !showSetting;
   };
-  const onBgColorSave = (value: string) => {
-    bgColor = value;
-    storage.setBackgroundColor(value);
+
+  let searchPosition = 'top';
+
+  let isSearchPositionTop = true;
+  let isSearchPositionMiddle = false;
+
+  $: isSearchPositionTop = searchPosition === 'top';
+  $: isSearchPositionMiddle = searchPosition === 'middle';
+
+  const onSelectSearchPosition = (v: string) => {
+    storage.setSearchPosition(v);
+    searchPosition = v;
   };
 
-  let nowColor = bgColor;
-  let color = new Color(bgColor);
-  let positionRelativeElmt: HTMLDivElement;
-  let isOpenColorPicker = false;
-
-  const openColorPicker = () => {
-    if (isOpenColorPicker === false) {
-      nowColor = bgColor;
-      previewColor = bgColor;
-      color = new Color(bgColor);
-      isOpenColorPicker = true;
-    }
-  };
-
-  let previewColor = bgColor;
-
-  const onColorPickerChange = (color: string) => {
-    previewColor = color;
-    bgColor = color;
-  };
-
-  const onColorPickerCancel = () => {
-    color = new Color(nowColor);
-    previewColor = nowColor;
-    bgColor = nowColor;
-  };
-
-  const onColorPickerSave = (color: string) => {
-    onBgColorSave(color);
-    bgColor = color;
-  };
-
-  const onResetDefaultColor = () => {
-    color = new Color(defaultSetting.backgroundColor);
-    bgColor = defaultSetting.backgroundColor;
-    previewColor = defaultSetting.backgroundColor;
-  };
+  const onSelectSearchPositionTop = () => onSelectSearchPosition('top');
+  const onSelectSearchPositionMiddle = () => onSelectSearchPosition('middle');
 
   onMount(() => {
     (async () => {
-      const defaultColor =
-        (await storage.getBackgroundColor()) || defaultSetting.backgroundColor;
-      bgColor = defaultColor;
-      nowColor = defaultColor;
-      previewColor = defaultColor;
+      const defaultSearchPosition =
+        (await storage.getSearchPosition()) || defaultSetting.searchPosition;
+      searchPosition = defaultSearchPosition;
     })();
   });
 </script>
@@ -79,41 +52,50 @@
   <meta name="description" content="Simple Newtab developed by Lin Cufoon" />
 </svelte:head>
 
-<div class="container" style="background-color: {bgColor}">
+<div class="container">
   <div class="header">
     <div class="settingIcon">
-      <SwitchSetting
-        open="{showSetting}"
-        changeOpen="{switchShowSetting}"
-        {bgColor}
-      />
+      <SwitchSetting open="{showSetting}" changeOpen="{switchShowSetting}" />
     </div>
   </div>
   <div class="main">
-    <div class="leftPart">
-      <div class="title web_font">遇见更好的自己，和更好的你。</div>
+    <div class="leftPart" class:leftPartPlaceMiddle="{isSearchPositionMiddle}">
+      <div
+        class="title web_font"
+        class:titleWhenPlaceCenter="{isSearchPositionMiddle}"
+      >
+        遇见更好的自己，和更好的你。
+      </div>
       <SearchBar />
     </div>
     <div class="rightPart" class:rightPartOpen="{showSetting}">
       <div class="settingPanel">
-        <div class="option" bind:this="{positionRelativeElmt}">
-          <div>背景颜色设置</div>
+        <div class="option">
+          <div>搜索位置</div>
           <div>
             <button
-              class="colorPickerButton"
-              style="{`background-color: ${previewColor}`}"
-              on:click="{openColorPicker}"
-            ></button>
+              class="positionPickerButton"
+              class:positionPickerButtonSelected="{isSearchPositionTop}"
+              on:click="{onSelectSearchPositionTop}"
+            >
+              {#if isSearchPositionTop}
+                <IconTopSelected />
+              {:else}
+                <IconTop />
+              {/if}
+            </button>
+            <button
+              class="positionPickerButton"
+              class:positionPickerButtonSelected="{isSearchPositionMiddle}"
+              on:click="{onSelectSearchPositionMiddle}"
+            >
+              {#if isSearchPositionMiddle}
+                <IconMiddleSelected />
+              {:else}
+                <IconMiddle />
+              {/if}
+            </button>
           </div>
-          <ColorPicker
-            bind:color
-            bind:positionRelativeElmt
-            bind:isOpenColorPicker
-            onChange="{onColorPickerChange}"
-            onCancel="{onColorPickerCancel}"
-            onSave="{onColorPickerSave}"
-            onReset="{onResetDefaultColor}"
-          />
         </div>
       </div>
     </div>
@@ -123,7 +105,15 @@
 <style lang="scss">
   @import './lib/scss/variable.scss';
 
+  $header-height: 72px;
+  $title-height: 36px;
+  $title-top-margin: 40px;
+
   .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: center;
     width: 100vw;
     height: 100vh;
     border: 0;
@@ -135,7 +125,7 @@
 
     .header {
       width: 100%;
-      height: 72px;
+      height: $header-height;
       position: relative;
 
       .settingIcon {
@@ -146,7 +136,9 @@
     }
 
     .main {
+      width: 100%;
       display: flex;
+      flex: 1;
       justify-content: space-around;
       align-items: flex-start;
       padding: 30px;
@@ -158,6 +150,12 @@
         justify-content: flex-start;
         align-items: center;
         flex-grow: 1;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .leftPartPlaceMiddle {
+        justify-content: center;
       }
 
       .rightPart {
@@ -178,9 +176,9 @@
     }
 
     .title {
-      margin-top: 40px;
+      margin-top: $title-top-margin;
       font-size: 25px;
-      height: 36px;
+      height: $title-height;
       line-height: 36px;
       transition: 0.2s;
       cursor: pointer;
@@ -195,6 +193,10 @@
       &:hover {
         font-size: 26px;
       }
+    }
+
+    .titleWhenPlaceCenter {
+      margin-top: -($title-height + 110px) * 2;
     }
 
     .settingPanel {
@@ -212,11 +214,19 @@
         user-select: none;
       }
 
-      .colorPickerButton {
+      .positionPickerButton {
+        background-color: #f0f0f0;
         width: 32px;
         height: 32px;
-        border-radius: 100%;
-        border: 4px #f0f0f0 solid;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        border-radius: 6px;
+        border: 2px transparent solid;
+      }
+
+      .positionPickerButtonSelected {
+        border: 2px $theme-color solid;
       }
     }
   }
@@ -224,6 +234,17 @@
   @media (prefers-color-scheme: dark) {
     .container {
       background-color: #000000;
+
+      .main .rightPart {
+        background-color: #252525;
+      }
+      .main .title {
+        color: $theme-color-dark;
+      }
+
+      .settingPanel .positionPickerButton {
+        background-color: #777;
+      }
     }
   }
 </style>
